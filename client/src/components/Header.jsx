@@ -8,7 +8,7 @@ export default function Header() {
     <header className='bg-slate-200 shadow-md'>
         <div className='flex justify-between items-center mx-auto max-w-6xl p-3'>
             <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
-                <span className='text-slate-500'>Sahand</span>
+                <span className='text-slate-500'>#Abd</span>
                 <span className='text-slate-700'>Estate</span>
             </h1>
 
