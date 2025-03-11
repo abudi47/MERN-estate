@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUP() {
   const [formData, setFormData] = useState({});
+  const [error, setError] = useState(""); // Store error message
+  const [loading, setLoading] = useState(false); // Track loading state
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -10,19 +14,33 @@ export default function SignUP() {
     });
   };
   console.log(formData);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      setLoading(true);
 
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData)
-    });
-    const data = await res.json();
-    console.log(data)
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+
+      if (data.success === false) {
+        setLoading(false);
+        setError(data.message);
+        return;
+      }
+      setLoading(false);
+      setError(null);
+      navigate('/sign-in');
+
+    } catch (error) {
+      setLoading(false);
+      setError(error.message);
+    }
   };
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -52,8 +70,11 @@ export default function SignUP() {
           placeholder="password"
           onChange={handleChange}
         />
-        <button className="bg-slate-900 text-white p-3 border rounded-lg hover:opacity-95 disabled:opacity-55">
-          Sign up
+        <button
+          disabled={loading}
+          className="bg-slate-900 text-white p-3 border rounded-lg hover:opacity-95 disabled:opacity-55"
+        >
+          {loading ? "Loading..." : "Sign Up"}
         </button>
       </form>
 
@@ -63,6 +84,7 @@ export default function SignUP() {
           <span className="text-blue-700">Sign in</span>
         </Link>
       </div>
+      {error && <p className="text-red-500 mt-5 ">{error}</p>}
     </div>
   );
 }
