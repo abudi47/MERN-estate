@@ -17,11 +17,9 @@ const userSchema = new mongoose.Schema(
       required: true,
       // unique: true
     },
-    avatar: {
-      type: String,
-      default:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    },
+    avatar: { type: String,
+      default: "https://estudent.astu.edu.et/api/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBN2VtQWc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--09bde2b84da8ca332c0a556a54d272d63afc527a/1716708330046.jpg"
+     },
   },
   { timestamps: true }
 ); // Adds createdAt and updatedAt fields automatically

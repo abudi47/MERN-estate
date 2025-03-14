@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import OAuth from "../components/OAuth";
 import {
   signInStart,
   signInSuccess,
@@ -13,7 +14,6 @@ export default function Signin() {
   const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -71,6 +71,7 @@ export default function Signin() {
           >
             {loading ? "Loading..." : "Sign In"}
           </button>
+          <OAuth />
         </form>
         <div className="mt-3 flex">
           <p>Don't you have an account?</p>

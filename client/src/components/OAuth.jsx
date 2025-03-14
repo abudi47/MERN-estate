@@ -8,13 +8,14 @@ import { useNavigate } from "react-router-dom";
 export default function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
 
       const result = await signInWithPopup(auth, provider);
+      console.log(result);
 
       const res = await fetch("/api/auth/google", {
         method: "POST",
@@ -23,10 +24,12 @@ export default function OAuth() {
         },
         body: JSON.stringify({
           name: result.user.displayName,
-          email: result.user.email,
           photo: result.user.photoURL,
+          email: result.user.email,
         }),
       });
+      console.log("Google Photo URL:", result.user.photoURL);
+      console.log(res);
       const data = await res.json();
       dispatch(signInSuccess(data));
       navigate("/");
@@ -34,6 +37,7 @@ export default function OAuth() {
       console.log("could not sign in with google", error);
     }
   };
+  
   return (
     <button
       type="button"
@@ -42,5 +46,6 @@ export default function OAuth() {
     >
       continue with Google
     </button>
+    
   );
 }
