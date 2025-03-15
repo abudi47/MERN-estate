@@ -39,7 +39,7 @@ export default function Header() {
             </li>
           </Link>
 
-          <Link to={"/sign-in"}>
+          <Link to={"/profile"}>
             {currentUser ? (
               <img
                 className="rounded-full object-cover h-8 w-8"
