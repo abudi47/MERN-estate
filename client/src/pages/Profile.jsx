@@ -92,6 +92,7 @@ export default function Profile() {
     }
   };
   console.log("the data", formData);
+  console.log("the image url ",imageUrl);
   return (
     <div>
       <div className="max-w-lg mx-auto p-3 mY-7">
