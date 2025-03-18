@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRef } from "react";
 // import { account } from "../appWrite/appwriteConfig";
-import {  storage } from "../appWrite/appwriteConfig";
+import { storage } from "../appWrite/appwriteConfig";
 import { Await } from "react-router-dom";
 import {
   deleteFailed,
@@ -11,6 +11,9 @@ import {
   updateFailed,
   updateStart,
   updateSuccess,
+  signoutStart,
+  signoutSuccess,
+  signoutFailed,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -113,6 +116,21 @@ export default function Profile() {
       dispatch(deleteFailed(error.message));
     }
   };
+
+  const signOutHandler = async () => {
+    try {
+      dispatch(signoutStart());
+      const res = await fetch(`api/auth/signout`);
+      const data = res.json();
+      if (data.success === false) {
+        dispatch(signoutFailed(data.message));
+        return;
+      }
+      dispatch(signoutSuccess(data));
+    } catch (error) {
+      dispatch(signoutFailed(error.message));
+    }
+  };
   console.log("the data", formData);
   console.log("the image url ", imageUrl);
   return (
@@ -175,7 +193,7 @@ export default function Profile() {
           <span onClick={deleteHandler} className="text-red-800 cursor-pointer">
             Delete account
           </span>
-          <span className="text-red-800 cursor-pointer">Sign out</span>
+          <span onClick={signOutHandler} className="text-red-800 cursor-pointer">Sign out</span>
         </div>
         <p className="text-red-950">{error ? error : ""}</p>
         <p className="text-green-700">
