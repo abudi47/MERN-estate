@@ -179,6 +179,7 @@ export default function Profile() {
             className="border-slate-400 focus:outline-none bg-white border rounded-lg p-2.5"
             onChange={handleChange}
           />
+          
           <button
             disabled={loading}
             className="bg-slate-800 p-2.5 text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80"
