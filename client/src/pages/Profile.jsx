@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRef } from "react";
-import { account, storage } from "../appWrite/appwriteConfig";
+// import { account } from "../appWrite/appwriteConfig";
+import {  storage } from "../appWrite/appwriteConfig";
 import { Await } from "react-router-dom";
 import {
+  deleteFailed,
+  deleteStart,
+  deleteSuccess,
   updateFailed,
   updateStart,
   updateSuccess,
@@ -11,12 +15,13 @@ import {
 import { useDispatch } from "react-redux";
 
 export default function Profile() {
-  const { currentUser, loading , error } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const [imageUrl, setImageUrl] = useState("");
   const [formData, setFormData] = useState({});
-  const [updateSuccesser , setUpdateSuccesser] = useState(false)
+  const [updateSuccesser, setUpdateSuccesser] = useState(false);
+
   const dispatch = useDispatch();
 
   console.log(file);
@@ -79,26 +84,41 @@ export default function Profile() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if(data.success === false) {
+      if (data.success === false) {
         dispatch(updateFailed(data.message));
         return;
       }
 
       dispatch(updateSuccess(data));
       setUpdateSuccesser(true);
-
     } catch (error) {
       dispatch(updateFailed(error.message));
     }
   };
+
+  const deleteHandler = async () => {
+    console.log("deleting ....");
+    try {
+      dispatch(deleteStart());
+      const res = await fetch(`api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = res.json();
+      if (data.success === false) {
+        dispatch(deleteFailed(data.message));
+        return;
+      }
+      dispatch(deleteSuccess(data));
+    } catch (error) {
+      dispatch(deleteFailed(error.message));
+    }
+  };
   console.log("the data", formData);
-  console.log("the image url ",imageUrl);
+  console.log("the image url ", imageUrl);
   return (
     <div>
       <div className="max-w-lg mx-auto p-3 mY-7">
-        <h1 className="text-3xl font-semibold text-center mx-auto">
-          Profile
-        </h1>
+        <h1 className="text-3xl font-semibold text-center mx-auto">Profile</h1>
         <form className="flex mt-7 flex-col gap-4" onSubmit={handleSubmit}>
           <input
             onChange={handleFileChange}
@@ -114,7 +134,9 @@ export default function Profile() {
             alt="profile"
           />
           {imageUrl && (
-            <p className="text-green-600 text-center">Image uploaded successfully!</p>
+            <p className="text-green-600 text-center">
+              Image uploaded successfully!
+            </p>
           )}
           <input
             defaultValue={currentUser.username}
@@ -139,7 +161,10 @@ export default function Profile() {
             className="border-slate-400 focus:outline-none bg-white border rounded-lg p-2.5"
             onChange={handleChange}
           />
-          <button disabled={loading} className="bg-slate-800 p-2.5 text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80">
+          <button
+            disabled={loading}
+            className="bg-slate-800 p-2.5 text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80"
+          >
             {loading ? "Loading..." : "Update"}
           </button>
           <button className="bg-green-600 p-2.5 text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80">
@@ -147,12 +172,16 @@ export default function Profile() {
           </button>
         </form>
         <div className="flex justify-between mt-4">
-          <span className="text-red-800 cursor-pointer">Delete account</span>
+          <span onClick={deleteHandler} className="text-red-800 cursor-pointer">
+            Delete account
+          </span>
           <span className="text-red-800 cursor-pointer">Sign out</span>
         </div>
         <p className="text-red-950">{error ? error : ""}</p>
-        <p className="text-green-700">{updateSuccesser ? "user is updated successfully..." : ""}</p>
-      </div>  
+        <p className="text-green-700">
+          {updateSuccesser ? "user is updated successfully..." : ""}
+        </p>
+      </div>
     </div>
   );
 }
