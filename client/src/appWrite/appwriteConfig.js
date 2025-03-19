@@ -1,11 +1,12 @@
 import { Client, Account, Storage } from "appwrite";
 
 const client = new Client();
+const projectId = import.meta.env.VITE_APP_PROJECT_ID;
 
 client
   .setEndpoint("https://cloud.appwrite.io/v1") // Your Appwrite endpoint
-  .setProject("67d536c6002df1bc5fe2"); // Your project ID this is undere setting
-//67d536c6002df1bc5fe2
+  .setProject(projectId);
+  // .setProject(import.meta.env.REACT_APP_BUCKET_ID); // Your project ID this is undere setting
 const account = new Account(client);
 const storage = new Storage(client);
 
