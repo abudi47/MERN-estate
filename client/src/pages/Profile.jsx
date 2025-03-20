@@ -4,6 +4,7 @@ import { useRef } from "react";
 // import { account } from "../appWrite/appwriteConfig";
 import { storage } from "../appWrite/appwriteConfig";
 import { Await } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   deleteFailed,
   deleteStart,
@@ -186,9 +187,9 @@ export default function Profile() {
           >
             {loading ? "Loading..." : "Update"}
           </button>
-          <button className="bg-green-600 p-2.5 text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80">
+          <Link to={"/create-listing"} className="bg-green-600 p-2.5 text-center text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80">
             create listing
-          </button>
+          </Link>
         </form>
         <div className="flex justify-between mt-4">
           <span onClick={deleteHandler} className="text-red-800 cursor-pointer">
