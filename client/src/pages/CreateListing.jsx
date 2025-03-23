@@ -297,6 +297,7 @@ console.log("Current user is " , currentUser)
               id="images"
               multiple
               accept="image/*"
+              
             />
             <button
               disabled={uploading}
