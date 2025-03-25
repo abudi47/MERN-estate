@@ -305,7 +305,7 @@ console.log("Current user is " , currentUser)
               onClick={handleImageSubmit}
               className="text-green-700 border rounded uppercase hover:shadow-lg disabled:opacity-80 border-green-700"
             >
-              {uploading ? "Uploading..." : "Upload"}
+              {uploading ? "Uploading....." : "Upload"}
             </button>
           </div>
           <p className="text-red-700">{imageUploadError && imageUploadError}</p>
@@ -327,7 +327,7 @@ console.log("Current user is " , currentUser)
               </div>
             ))}
           <button disabled={loading || uploading} className="text-white p-3 my-2 uppercase rounded-lg  bg-slate-700 hover:opacity-95 disabled:opacity-80">
-            {loading ? "Creating..." : "Create Listing"}
+            {loading ? "Creating....." : "Create Listing"}
           </button>
           {error && <p className="text-red-700">{error}</p>}
         </div>
