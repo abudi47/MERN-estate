@@ -25,6 +25,8 @@ export default function Profile() {
   const [imageUrl, setImageUrl] = useState("");
   const [formData, setFormData] = useState({});
   const [updateSuccesser, setUpdateSuccesser] = useState(false);
+  const [userListing, setUserListing] = useState([]);
+  const [showListingError, setShowListingError] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -59,7 +61,7 @@ export default function Profile() {
       );
       console.log("Upload successful:", response);
 
-      const imageUrl = storage.getFilePreview(
+      const imageUrl = storage.getFileView(
         "67ecde970033388e34f9",
         response.$id
       );
@@ -134,6 +136,27 @@ export default function Profile() {
   };
   console.log("the data", formData);
   console.log("the image url ", imageUrl);
+
+  const handleListings = async () => {
+    try {
+      setShowListingError(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch listings");
+      }
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingError(true);
+        return;
+      }
+      setUserListing(data);
+      console.log("dsssssss", userListing);
+    } catch (error) {
+      console.error("Error fetching listings:", error);
+
+      setShowListingError(true);
+    }
+  };
   return (
     <div>
       <div className="max-w-lg mx-auto p-3 mY-7">
@@ -180,14 +203,17 @@ export default function Profile() {
             className="border-slate-400 focus:outline-none bg-white border rounded-lg p-2.5"
             onChange={handleChange}
           />
-          
+
           <button
             disabled={loading}
             className="bg-slate-800 p-2.5 text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80"
           >
             {loading ? "Loading..." : "Update"}
           </button>
-          <Link to={"/create-listing"} className="bg-green-600 p-2.5 text-center text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80">
+          <Link
+            to={"/create-listing"}
+            className="bg-green-600 p-2.5 text-center text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80"
+          >
             create listing
           </Link>
         </form>
@@ -195,12 +221,67 @@ export default function Profile() {
           <span onClick={deleteHandler} className="text-red-800 cursor-pointer">
             Delete account
           </span>
-          <span onClick={signOutHandler} className="text-red-800 cursor-pointer">Sign out</span>
+          <span
+            onClick={signOutHandler}
+            className="text-red-800 cursor-pointer"
+          >
+            Sign out
+          </span>
         </div>
+        {/* <div className="flex items-center justify-center">
+          <span onClick={handleListings} className="text-green-900">Show listings </span>
+        </div> */}
+
         <p className="text-red-950">{error ? error : ""}</p>
         <p className="text-green-700">
           {updateSuccesser ? "user is updated successfully..." : ""}
         </p>
+        <button
+          onClick={handleListings}
+          className="text-green-700 w-full cursor-pointer"
+        >
+          Show listings{" "}
+        </button>
+        <p className="text-red-950 text-center mt-3 ">
+          {showListingError ? "Error showing listing..." : ""}
+        </p>
+        <div>
+          {userListing && userListing.length > 0 && (
+            <div className="flex flex-col gap-4">
+              <h1 className="text-center mt-7 text-2xl font-semibold">Your listing</h1>
+              {userListing.map((lis) => (
+              <div
+                className="border rounded-lg gap-4 border-slate-50 flex justify-between items-center p-3 "
+                key={lis._id}
+              >
+                <Link to={`listings/${lis._id}`}>
+                  <img
+                    src={lis.imageUrls[0]}
+                    alt="listing img"
+                    className="h-16 w-16 object-contain "
+                  />
+                </Link>
+
+                <Link
+                  className=" flex-1 text-slate-700 font-semibold  hover:underline truncate"
+                  to={`listings/${lis._id}`}
+                >
+                  <p className="">{lis.name}</p>
+                </Link>
+
+                <div className="flex flex-col items-center">
+                  <button className="text-red-700 uppercase cursor-pointer">
+                    Delete
+                  </button>
+                  <button className="text-green-700 uppercase cursor-pointer">
+                    Edit
+                  </button>
+                </div>
+              </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
