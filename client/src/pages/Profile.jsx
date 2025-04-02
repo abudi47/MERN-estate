@@ -53,14 +53,14 @@ export default function Profile() {
     try {
       const fileId = `unique()`; // Generates a unique ID
       const response = await storage.createFile(
-        "67d5712d002738777653",
+        "67ecde970033388e34f9",
         fileId,
         file
       );
       console.log("Upload successful:", response);
 
       const imageUrl = storage.getFilePreview(
-        "67d5712d002738777653",
+        "67ecde970033388e34f9",
         response.$id
       );
       setImageUrl(imageUrl);

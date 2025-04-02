@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { storage } from "../appWrite/appwriteConfig";
-import {useSelector} from "react-redux"
-import {useNavigate} from "react-router-dom"
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 export default function CreateListing() {
-  const {currentUser} = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -78,16 +78,17 @@ export default function CreateListing() {
     try {
       const fileId = `unique()`; // Generates a unique ID
       const response = await storage.createFile(
-        "67d5712d002738777653",
+        "67ecde970033388e34f9",
         fileId,
         file
       );
-      console.log("Responsss", response);
-      const imageUrl = storage.getFilePreview(
-        "67d5712d002738777653",
+      console.log("Response:", response);
+
+      const imageUrl = storage.getFileView(
+        "67ecde970033388e34f9",
         response.$id
       );
-      console.log("Image URL:", imageUrl);
+      console.log("Image URL:", imageUrl); // Log the image URL
       return imageUrl; // Return the file URL
     } catch (error) {
       console.error("Error storing image:", error);
@@ -103,11 +104,13 @@ export default function CreateListing() {
       imageUrls: formData.imageUrls.filter((_, i) => i !== index),
     });
   };
-console.log("Current user is " , currentUser)
+  console.log("Current user is ", currentUser);
   const handleSubmit = async (e) => {
     try {
-      if (formData.imageUrls.length < 1) return setError("Please upload an image");
-      if (+formData.regularPrice < +formData.discountPrice  ) return setError("Discount price cannot be greater than regular price"); 
+      if (formData.imageUrls.length < 1)
+        return setError("Please upload an image");
+      if (+formData.regularPrice < +formData.discountPrice)
+        return setError("Discount price cannot be greater than regular price");
 
       e.preventDefault();
       setLoading(true);
@@ -118,9 +121,7 @@ console.log("Current user is " , currentUser)
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({...formData,
-          userRef: currentUser._id,
-        }),
+        body: JSON.stringify({ ...formData, userRef: currentUser._id }),
       });
       const data = res.json();
       setLoading(false);
@@ -128,6 +129,7 @@ console.log("Current user is " , currentUser)
         setError(data.message);
       }
       navigate(`/listing/${data._id}`); // Redirect to the newly created listing
+      console.log("dataisssssssss", data._id);
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -263,22 +265,23 @@ console.log("Current user is " , currentUser)
               </div>
             </div>
             {formData.offer && (
-            <div className="flex items-center gap-2 ">
-              <input
-                className="p-5 border border-gray-200 rounded-lg "
-                placeholder=""
-                type="number"
-                id="discountPrice"
-                min={50}
-                max={1000000}
-                onChange={handleChange}
-                value={formData.discountPrice}
-              />
-              <div className="flex flex-col items-center">
-                <p>Discounted Price</p>
-                <span className="text-xs">( $/Month )</span>
+              <div className="flex items-center gap-2 ">
+                <input
+                  className="p-5 border border-gray-200 rounded-lg "
+                  placeholder=""
+                  type="number"
+                  id="discountPrice"
+                  min={50}
+                  max={1000000}
+                  onChange={handleChange}
+                  value={formData.discountPrice}
+                />
+                <div className="flex flex-col items-center">
+                  <p>Discounted Price</p>
+                  <span className="text-xs">( $/Month )</span>
+                </div>
               </div>
-            </div>)}
+            )}
           </div>
         </div>
 
@@ -297,7 +300,6 @@ console.log("Current user is " , currentUser)
               id="images"
               multiple
               accept="image/*"
-              
             />
             <button
               disabled={uploading}
@@ -309,6 +311,8 @@ console.log("Current user is " , currentUser)
             </button>
           </div>
           <p className="text-red-700">{imageUploadError && imageUploadError}</p>
+          { console.log("image url isssss" , formData.imageUrls)}
+
           {formData.imageUrls.length > 0 &&
             formData.imageUrls.map((url, index) => (
               <div className="flex justify-between items-center p-3">
@@ -326,7 +330,10 @@ console.log("Current user is " , currentUser)
                 </button>
               </div>
             ))}
-          <button disabled={loading || uploading} className="text-white p-3 my-2 uppercase rounded-lg  bg-slate-700 hover:opacity-95 disabled:opacity-80">
+          <button
+            disabled={loading || uploading}
+            className="text-white p-3 my-2 uppercase rounded-lg  bg-slate-700 hover:opacity-95 disabled:opacity-80"
+          >
             {loading ? "Creating....." : "Create Listing"}
           </button>
           {error && <p className="text-red-700">{error}</p>}
