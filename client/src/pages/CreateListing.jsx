@@ -123,7 +123,15 @@ export default function CreateListing() {
         },
         body: JSON.stringify({ ...formData, userRef: currentUser._id }),
       });
-      const data = res.json();
+      if (!res.ok) {
+        throw new Error("Failed to create listing");
+      }
+
+      const data = await res.json();
+      console.log("Created Listing Data:", data); // Log the response
+      if (!data._id) {
+        throw new Error("Listing ID is missing in the response");
+      }
       setLoading(false);
       if (data.success === "false") {
         setError(data.message);
@@ -311,7 +319,7 @@ export default function CreateListing() {
             </button>
           </div>
           <p className="text-red-700">{imageUploadError && imageUploadError}</p>
-          { console.log("image url isssss" , formData.imageUrls)}
+          {console.log("image url isssss", formData.imageUrls)}
 
           {formData.imageUrls.length > 0 &&
             formData.imageUrls.map((url, index) => (
