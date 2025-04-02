@@ -17,6 +17,7 @@ import {
   signoutFailed,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import Listing from "../../../api/models/listing.model";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -157,6 +158,23 @@ export default function Profile() {
       setShowListingError(true);
     }
   };
+
+  const deleteListinghandler = async (lisID) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${lisID}` , {
+        method: "DELETE",
+      })
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return
+      }
+      setUserListing((prev) => prev.filter((listing) => listing._id !== lisID))
+    } catch (error) {
+      console.log(error.message)
+    }
+
+  }
   return (
     <div>
       <div className="max-w-lg mx-auto p-3 mY-7">
@@ -270,7 +288,7 @@ export default function Profile() {
                 </Link>
 
                 <div className="flex flex-col items-center">
-                  <button className="text-red-700 uppercase cursor-pointer">
+                  <button onClick={() => deleteListinghandler(lis._id)} className="text-red-700 uppercase cursor-pointer">
                     Delete
                   </button>
                   <button className="text-green-700 uppercase cursor-pointer">
