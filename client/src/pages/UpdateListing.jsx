@@ -159,7 +159,7 @@ export default function UpdateListing() {
       setFormData(data);
     };
     fetchListing();
-  }, []);
+  }, [params.lisId]);
   return (
     <main className="mx-auto p-3 max-w-4xl">
       <h1 className="text-3xl font-semibold text-center my-7 ">Edit Listing</h1>
