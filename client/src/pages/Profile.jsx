@@ -291,9 +291,11 @@ export default function Profile() {
                   <button onClick={() => deleteListinghandler(lis._id)} className="text-red-700 uppercase cursor-pointer">
                     Delete
                   </button>
+                  <Link to={`/edit-listing/${lis._id}`}>
                   <button className="text-green-700 uppercase cursor-pointer">
                     Edit
                   </button>
+                  </Link>
                 </div>
               </div>
               ))}
