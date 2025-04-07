@@ -282,7 +282,7 @@ export default function Profile() {
 
                 <Link
                   className=" flex-1 text-slate-700 font-semibold  hover:underline truncate"
-                  to={`listings/${lis._id}`}
+                  to={`/listing/${lis._id}`}
                 >
                   <p className="">{lis.name}</p>
                 </Link>

@@ -138,7 +138,7 @@ export default function UpdateListing() {
       if (data.success === "false") {
         setError(data.message);
       }
-      navigate(`/listings/${data._id}`); // Redirect to the newly created listing
+      navigate(`/listing/${data._id}`); // Redirect to the newly created listing
       console.log("dataisssssssss", data._id);
     } catch (error) {
       setError(error.message);
