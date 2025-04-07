@@ -50,7 +50,7 @@ export default function Listing() {
   }, [params.lisId]);
 
   const handleContact = () => {
-    setContact(false);
+    setContact(!contact);
   };
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -84,7 +84,7 @@ export default function Listing() {
         </>
       )}
 
-      <div className="bg-white shadow-md rounded-lg items-center mx-auto max-w-2xl p-6 mt-8">
+      <div className="bg-white shadow-md shadow-amber-600 rounded-lg items-center mx-auto max-w-2xl p-6 mt-8">
         <h1 className="text-3xl font-semibold text-gray-800 text-center">
           {listing?.name} {" - "}${" "}
           {listing?.offer
@@ -159,6 +159,10 @@ export default function Listing() {
               className="bg-gray-50 p-3 border border-gray-300 w-full rounded mt-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your message here"
             />
+            <button
+            onClick={handleContact}
+            className="bg-blue-600 w-full mt-6 rounded p-3 cursor-pointer text-center text-white uppercase hover:bg-blue-700 transition"
+          >Send a message</button>
           </div>
         )}
       </div>

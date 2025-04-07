@@ -177,8 +177,8 @@ export default function Profile() {
   }
   return (
     <div>
-      <div className="max-w-lg mx-auto p-3 mY-7">
-        <h1 className="text-3xl font-semibold text-center mx-auto">Profile</h1>
+      <div className="bg-white shadow-lg rounded-lg items-center mx-auto max-w-2xl p-6 mt-8">
+      <h1 className="text-3xl font-semibold text-center mx-auto">Profile</h1>
         <form className="flex mt-7 flex-col gap-4" onSubmit={handleSubmit}>
           <input
             onChange={handleFileChange}
@@ -189,7 +189,7 @@ export default function Profile() {
           />
           <img
             onClick={() => fileRef.current.click()}
-            className="rounded-full h-30 w-30 self-center object-cover cursor-pointer"
+            className="rounded-full h-30 border border-s-amber-200 w-30 self-center object-cover cursor-pointer"
             src={imageUrl || currentUser.avatar}
             alt="profile"
           />
@@ -269,14 +269,14 @@ export default function Profile() {
               <h1 className="text-center mt-7 text-2xl font-semibold">Your listing</h1>
               {userListing.map((lis) => (
               <div
-                className="border rounded-lg gap-4 border-slate-50 flex justify-between items-center p-3 "
+                className="shadow-md shadow-green-700 rounded-lg gap-4   flex justify-between items-center p-3 "
                 key={lis._id}
               >
                 <Link to={`listings/${lis._id}`}>
                   <img
                     src={lis.imageUrls[0]}
                     alt="listing img"
-                    className="h-16 w-16 object-contain "
+                    className="h-16 w-16 object-contain shadow-md shadow-amber-700 rounded-md"
                   />
                 </Link>
 
