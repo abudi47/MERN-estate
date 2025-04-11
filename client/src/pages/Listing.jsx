@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
+import { useSelector } from "react-redux";
 import {
   FaBath,
   FaBed,
@@ -9,7 +10,7 @@ import {
   FaMapMarkerAlt,
   FaParking,
 } from "react-icons/fa"; // Import the location icon
-
+import Contact from "../components/Contact.jsx";
 import SwiperCore from "swiper";
 import "swiper/css/bundle";
 
@@ -18,7 +19,11 @@ export default function Listing() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [listing, setListing] = useState(null);
-  const [contact, setContact] = useState(true);
+  const [contact, setContact] = useState(false);
+  const {currentUser} = useSelector((state) => state.user);
+  console.log(currentUser._id , listing?.userRef)
+  // console.log(currentUser)
+
 
   const params = useParams();
 
@@ -49,9 +54,7 @@ export default function Listing() {
     fetchListing();
   }, [params.lisId]);
 
-  const handleContact = () => {
-    setContact(!contact);
-  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       {loading && (
@@ -141,30 +144,18 @@ export default function Listing() {
             <FaChair className="text-lg" />
             {listing?.furnished ? "Furnished" : "Not Furnished"}
           </li>
-        </ul>
-        {contact ? (
+        </ul> 
+        
+        {currentUser &&  listing?.userRef !== currentUser?._id  && !contact && (
           <button
-            onClick={handleContact}
+            onClick={() => setContact(true)}
             className="bg-blue-600 w-full mt-6 rounded p-3 cursor-pointer text-center text-white uppercase hover:bg-blue-700 transition"
-          >
+          > 
             Contact Landlord
-          </button>
-        ) : (
-          <div className="mt-6">
-            <p className="flex items-center justify-center text-gray-700">
-              Contact Abduselam for {listing.name} House
-            </p>
-            <input
-              type="text"
-              className="bg-gray-50 p-3 border border-gray-300 w-full rounded mt-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your message here"
-            />
-            <button
-            onClick={handleContact}
-            className="bg-blue-600 w-full mt-6 rounded p-3 cursor-pointer text-center text-white uppercase hover:bg-blue-700 transition"
-          >Send a message</button>
-          </div>
-        )}
+          </button>)}
+        {contact && <Contact listing={listing}/> }
+          {/*  */}
+       
       </div>
     </div>
   );

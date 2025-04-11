@@ -17,7 +17,6 @@ import {
   signoutFailed,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import Listing from "../../../api/models/listing.model";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -269,14 +268,14 @@ export default function Profile() {
               <h1 className="text-center mt-7 text-2xl font-semibold">Your listing</h1>
               {userListing.map((lis) => (
               <div
-                className="shadow-md shadow-green-700 rounded-lg gap-4   flex justify-between items-center p-3 "
+                className="shadow-md rounded-lg gap-4   flex justify-between items-center p-3 "
                 key={lis._id}
               >
                 <Link to={`listings/${lis._id}`}>
                   <img
                     src={lis.imageUrls[0]}
                     alt="listing img"
-                    className="h-16 w-16 object-contain shadow-md shadow-amber-700 rounded-md"
+                    className="h-16 w-16 object-contain shadow-sm shadow-green-300 rounded-md"
                   />
                 </Link>
 
