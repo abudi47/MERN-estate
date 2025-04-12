@@ -21,7 +21,7 @@ export default function Listing() {
   const [listing, setListing] = useState(null);
   const [contact, setContact] = useState(false);
   const {currentUser} = useSelector((state) => state.user);
-  console.log(currentUser._id , listing?.userRef)
+  console.log(currentUser?._id , listing?.userRef)
   // console.log(currentUser)
 
 
