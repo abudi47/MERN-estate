@@ -101,7 +101,8 @@ export default function Profile() {
       dispatch(updateFailed(error.message));
     }
   };
-
+  console.log("eeeee",loading)
+  console.log("eeeee",error)
   const deleteHandler = async () => {
     console.log("deleting ....");
     try {
