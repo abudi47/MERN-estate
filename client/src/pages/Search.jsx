@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 export default function Search() {
   const [sidebardata, setsidebardata] = useState({
     searchTerm: "",
@@ -9,12 +10,100 @@ export default function Search() {
     sort: "created_at",
     order: "desc",
   });
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    if (
+      e.target.id === "all" ||
+      e.target.id === "rent" ||
+      e.target.id === "sell"
+    ) {
+      setsidebardata({ ...sidebardata, type: e.target.id });
+    }
+    if (e.target.id === "searchTerm") {
+      setsidebardata({ ...sidebardata, searchTerm: e.target.value });
+    }
+    if (
+      e.target.id === "offer" ||
+      e.target.id === "furnished" ||
+      e.target.id === "parking"
+    ) {
+      setsidebardata({
+        ...sidebardata,
+        [e.target.id]:
+          e.target.checked || e.target.checked === "true" ? true : false,
+      });
+    }
+    if (e.target.id === "sort_order") {
+      const sort = e.target.value.split("_")[0];
+      const order = e.target.value.split("_")[1];
+      setsidebardata({ ...sidebardata, sort, order });
+    }
+  };
+  console.log(sidebardata);
 
-  const handleChange = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams();
+    urlParams.set("searchTerm", sidebardata.searchTerm);
+    urlParams.set("type", sidebardata.type);
+    urlParams.set("parking", sidebardata.parking);
+    urlParams.set("furnished", sidebardata.furnished);
+    urlParams.set("offer", sidebardata.offer);
+    urlParams.set("sort", sidebardata.sort);
+    urlParams.set("order", sidebardata.order);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+    const [loading , setLoading] = useState(false);
+    const [listings, setListings] = useState([]);
+
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFormUrl = urlParams.get("searchTerm");
+    const typeFormUrl = urlParams.get("type");
+    const parkingFormUrl = urlParams.get("parking");
+    const furnishedFormUrl = urlParams.get("furnished");
+    const offerFormUrl = urlParams.get("offer");
+    const sortFormUrl = urlParams.get("sort");
+    const orderFormUrl = urlParams.get("order");
+
+    if (
+      searchTermFormUrl ||
+      typeFormUrl ||
+      parkingFormUrl ||
+      furnishedFormUrl ||
+      offerFormUrl ||
+      sortFormUrl ||
+      orderFormUrl
+    ) {
+      setsidebardata({
+        searchTerm: searchTermFormUrl || "",
+        type: typeFormUrl || "all",
+        parking: parkingFormUrl === "true" ? true : false,
+        furnished: furnishedFormUrl === "true" ? true: false,
+        offer: offerFormUrl === "true" ? true: false,
+        sort: sortFormUrl || "created_at",
+        order:orderFormUrl || "desc",
+      });
+
+      const fetchListings = async () => {
+        setLoading(true);
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        const data = await res.json();
+        setListings(data);
+        setLoading(false);
+      }
+      fetchListings();
+    }
+  }, [location.search]);
+
+  console.log(listings)
   return (
     <div className="flex flex-col md:flex-row md:min-h-screen">
       <div className="p-7 border-b-2 border-slate-300 shadow-slate-50 shadow-xl  md:border-r-2">
-        <form className="flex flex-col gap-7">
+        <form className="flex flex-col gap-7" onSubmit={handleSubmit}>
           <div className="flex items-center gap-2">
             <label className="whitespace-nowrap font-semibold">
               Search Term:
@@ -55,6 +144,7 @@ export default function Search() {
               <input
                 type="checkbox"
                 checked={sidebardata.type === "sell"}
+                onChange={handleChange}
                 id="sell"
                 className="w-5"
               />
@@ -100,7 +190,7 @@ export default function Search() {
             <label className="whitespace-nowrap font-semibold">Sort :</label>
             <select
               onChange={handleChange}
-              defaultValue={'created_at_desc'}
+              defaultValue={"created_at_desc"}
               id="sort_order"
               className="border rounded-lg p-2 w-full bg-white  border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
             >
