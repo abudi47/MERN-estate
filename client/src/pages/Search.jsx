@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ListingCard from "../components/ListingCard";
 export default function Search() {
   const [sidebardata, setsidebardata] = useState({
     searchTerm: "",
@@ -54,9 +55,8 @@ export default function Search() {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
-    const [loading , setLoading] = useState(false);
-    const [listings, setListings] = useState([]);
-
+  const [loading, setLoading] = useState(false);
+  const [listings, setListings] = useState([]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -81,10 +81,10 @@ export default function Search() {
         searchTerm: searchTermFormUrl || "",
         type: typeFormUrl || "all",
         parking: parkingFormUrl === "true" ? true : false,
-        furnished: furnishedFormUrl === "true" ? true: false,
-        offer: offerFormUrl === "true" ? true: false,
+        furnished: furnishedFormUrl === "true" ? true : false,
+        offer: offerFormUrl === "true" ? true : false,
         sort: sortFormUrl || "created_at",
-        order:orderFormUrl || "desc",
+        order: orderFormUrl || "desc",
       });
 
       const fetchListings = async () => {
@@ -94,12 +94,13 @@ export default function Search() {
         const data = await res.json();
         setListings(data);
         setLoading(false);
-      }
+      };
       fetchListings();
     }
   }, [location.search]);
 
-  console.log(listings)
+  console.log(listings);
+  // console.log("addressssssss",listings[0])
   return (
     <div className="flex flex-col md:flex-row md:min-h-screen">
       <div className="p-7 border-b-2 border-slate-300 shadow-slate-50 shadow-xl  md:border-r-2">
@@ -207,10 +208,30 @@ export default function Search() {
         </form>
       </div>
 
-      <div>
-        <h1 className="text-3xl font-semibold text-slate-700 p-3 mt-5">
+      <div className="p-7   flex flex-col gap-5 md:w-full ">
+        <h1 className="text-3xl font-semibold text-slate-700  mt-5">
           Listing results:
         </h1>
+        {/* <div className="flex flex-col gap-6 sm:items-center  md:grid md:grid-cols-2 lg:grid-cols-3">
+          <ListingCard listings={listings} loading={loading} />
+
+        </div> */}
+        <div className=" flex flex-wrap   gap-4  w-full p-4 ">
+          {!loading && listings.length === 0 && (
+            <h1 className="text-xl flex font-semibold text-slate-700  mt-5">
+              No listings found!
+            </h1>
+          )}
+          {loading && (
+            <h1 className="text-xl flex font-semibold text-slate-700  mt-5">
+            Loading....
+          </h1>
+            )}
+
+            {!loading && listings && listings.map((listing) => (
+              <ListingCard key={listing._id} listing={listing}/>
+            ))}
+        </div>
       </div>
     </div>
   );
