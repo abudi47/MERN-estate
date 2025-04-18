@@ -42,6 +42,9 @@ export default function Search() {
   };
   console.log(sidebardata);
 
+  const [showmore ,setShowmore] = useState(false);
+  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams();
@@ -67,7 +70,7 @@ export default function Search() {
     const offerFormUrl = urlParams.get("offer");
     const sortFormUrl = urlParams.get("sort");
     const orderFormUrl = urlParams.get("order");
-
+    
     if (
       searchTermFormUrl ||
       typeFormUrl ||
@@ -89,16 +92,34 @@ export default function Search() {
 
       const fetchListings = async () => {
         setLoading(true);
+        setShowmore(false);
         const searchQuery = urlParams.toString();
         const res = await fetch(`/api/listing/get?${searchQuery}`);
         const data = await res.json();
+        if ( data.length > 8) {
+          setShowmore(true);
+        }else {
+          setShowmore(false);
+        }
         setListings(data);
         setLoading(false);
       };
       fetchListings();
     }
   }, [location.search]);
-
+  const onClickShowMore = async () => {
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("startIndex", startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await res.json();
+    if (data.length < 9) {
+      setShowmore(false);
+    }
+    setListings([...listings, ...data]);
+  }
   console.log(listings);
   // console.log("addressssssss",listings[0])
   return (
@@ -231,6 +252,11 @@ export default function Search() {
             {!loading && listings && listings.map((listing) => (
               <ListingCard key={listing._id} listing={listing}/>
             ))}
+            {showmore && (
+              <button onClick={onClickShowMore} className="text-green-600 hover:underline font-semibold hover:text-green-800 transition duration-200 ease-in-out w-full cursor-pointer">
+                  Show more
+              </button>
+            )}
         </div>
       </div>
     </div>
