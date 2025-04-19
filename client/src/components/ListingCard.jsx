@@ -2,7 +2,6 @@ import React from "react";
 import { FaLocationArrow, FaMapMarkerAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 export default function ListingCard({ listing }) {
-  console.log("newewee", listing.imageUrls);
   return (
     <div className="bg-white shadow-md flex flex-col  overflow-hidden hover:shadow-lg transition-shadow rounded-lg w-full  sm:w-[300px]">
       <Link to={`/listing/${listing._id}`}>

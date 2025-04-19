@@ -16,7 +16,7 @@ export default function Search() {
     if (
       e.target.id === "all" ||
       e.target.id === "rent" ||
-      e.target.id === "sell"
+      e.target.id === "sale"
     ) {
       setsidebardata({ ...sidebardata, type: e.target.id });
     }
@@ -42,8 +42,7 @@ export default function Search() {
   };
   console.log(sidebardata);
 
-  const [showmore ,setShowmore] = useState(false);
-  
+  const [showmore, setShowmore] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -70,7 +69,7 @@ export default function Search() {
     const offerFormUrl = urlParams.get("offer");
     const sortFormUrl = urlParams.get("sort");
     const orderFormUrl = urlParams.get("order");
-    
+
     if (
       searchTermFormUrl ||
       typeFormUrl ||
@@ -96,9 +95,9 @@ export default function Search() {
         const searchQuery = urlParams.toString();
         const res = await fetch(`/api/listing/get?${searchQuery}`);
         const data = await res.json();
-        if ( data.length > 8) {
+        if (data.length > 8) {
           setShowmore(true);
-        }else {
+        } else {
           setShowmore(false);
         }
         setListings(data);
@@ -119,7 +118,7 @@ export default function Search() {
       setShowmore(false);
     }
     setListings([...listings, ...data]);
-  }
+  };
   console.log(listings);
   // console.log("addressssssss",listings[0])
   return (
@@ -165,9 +164,9 @@ export default function Search() {
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                checked={sidebardata.type === "sell"}
+                checked={sidebardata.type === "sale"}
                 onChange={handleChange}
-                id="sell"
+                id="sale"
                 className="w-5"
               />
               <span>Sell</span>
@@ -245,18 +244,23 @@ export default function Search() {
           )}
           {loading && (
             <h1 className="text-xl flex font-semibold text-slate-700  mt-5">
-            Loading....
-          </h1>
-            )}
+              Loading....
+            </h1>
+          )}
 
-            {!loading && listings && listings.map((listing) => (
-              <ListingCard key={listing._id} listing={listing}/>
+          {!loading &&
+            listings &&
+            listings.map((listing) => (
+              <ListingCard key={listing._id} listing={listing} />
             ))}
-            {showmore && (
-              <button onClick={onClickShowMore} className="text-green-600 hover:underline font-semibold hover:text-green-800 transition duration-200 ease-in-out w-full cursor-pointer">
-                  Show more
-              </button>
-            )}
+          {showmore && (
+            <button
+              onClick={onClickShowMore}
+              className="text-green-600 hover:underline font-semibold hover:text-green-800 transition duration-200 ease-in-out w-full cursor-pointer"
+            >
+              Show more
+            </button>
+          )}
         </div>
       </div>
     </div>
