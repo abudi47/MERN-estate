@@ -20,10 +20,9 @@ export default function Listing() {
   const [error, setError] = useState(false);
   const [listing, setListing] = useState(null);
   const [contact, setContact] = useState(false);
-  const {currentUser} = useSelector((state) => state.user);
-  console.log(currentUser?._id , listing?.userRef)
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser?._id, listing?.userRef);
   // console.log(currentUser)
-
 
   const params = useParams();
 
@@ -53,7 +52,6 @@ export default function Listing() {
     };
     fetchListing();
   }, [params.lisId]);
-
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -110,7 +108,7 @@ export default function Listing() {
               </p>
               {listing?.offer && (
                 <p className="mt-3 bg-green-600 max-w-[200px] rounded-md text-white text-center p-2">
-                  ${listing?.discountPrice} Discount
+                  ${+listing?.regularPrice - listing?.discountPrice} Discount
                 </p>
               )}
             </div>
@@ -144,18 +142,18 @@ export default function Listing() {
             <FaChair className="text-lg" />
             {listing?.furnished ? "Furnished" : "Not Furnished"}
           </li>
-        </ul> 
-        
-        {currentUser &&  listing?.userRef !== currentUser?._id  && !contact && (
+        </ul>
+
+        {currentUser && listing?.userRef !== currentUser?._id && !contact && (
           <button
             onClick={() => setContact(true)}
             className="bg-blue-600 w-full mt-6 rounded p-3 cursor-pointer text-center text-white uppercase hover:bg-blue-700 transition"
-          > 
+          >
             Contact Landlord
-          </button>)}
-        {contact && <Contact listing={listing}/> }
-          {/*  */}
-       
+          </button>
+        )}
+        {contact && <Contact listing={listing} />}
+        {/*  */}
       </div>
     </div>
   );

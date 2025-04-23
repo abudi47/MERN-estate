@@ -11,6 +11,7 @@ export default function Home() {
   const [offerListing, setOfferListng] = useState([]);
   const [saleLisintg, setSaleListing] = useState([]);
   const [rentListing, setRentListing] = useState([]);
+  const [loadingData, setLoadingData] = useState(false);
   SwiperCore.use([Navigation]);
   useEffect(() => {
     const fetchOfferListing = async () => {
@@ -18,22 +19,23 @@ export default function Home() {
         const res = await fetch("/api/listing/get?offer=true&limit=4");
         const data = await res.json();
         setOfferListng(data);
-        fetchSaleListing();
+        await fetchSaleListing();
       } catch (error) {
         console.log(error);
       }
     };
+  
     const fetchSaleListing = async () => {
       try {
         const res = await fetch("/api/listing/get?type=sale&limit=4");
         const data = await res.json();
         setSaleListing(data);
-        fetchRentListing();
+        await fetchRentListing();
       } catch (error) {
         console.log(error);
       }
     };
-
+  
     const fetchRentListing = async () => {
       try {
         const res = await fetch("/api/listing/get?type=rent&limit=4");
@@ -41,20 +43,23 @@ export default function Home() {
         setRentListing(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoadingData(false); // ✅ Only stop loading when last fetch is done
       }
     };
+  
+    setLoadingData(true); // ✅ Start loading
     fetchOfferListing();
   }, []);
-  console.log(offerListing);
-  console.log(rentListing);
-  console.log(saleLisintg);
+  
+
   return (
     <div>
       {/* top*/}
       <div>
         <div className="flex flex-col gap-6 p-28 px-3 mx-auto max-w-6xl">
           <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-            Find tour next <span className="text-slate-500">perfect</span>{" "}
+            Find your next <span className="text-slate-500">perfect</span>{" "}
             <br /> place with ease
           </h1>
           <div className="text-gray-500 text-xs sm:text-sm ">
@@ -86,6 +91,11 @@ export default function Home() {
             </SwiperSlide>
           ))}
       </Swiper>
+      {loadingData && (
+        <div className="flex justify-center mt-2">
+          <div className="w-38 h-38 border-10 border-green-900 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
 
       {/* listing */}
       <div className="max-w-7xl mx-auto p-3 flex flex-col gap-8 my-10">

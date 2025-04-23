@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { storage } from "../appWrite/appwriteConfig";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { set } from "mongoose";
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
