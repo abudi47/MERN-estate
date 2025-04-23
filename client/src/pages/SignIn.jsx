@@ -54,14 +54,14 @@ export default function Signin() {
           <input
             id="email"
             type="email"
-            className=" border bg-white rounded-lg p-2.5 "
+            className=" border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none"
             placeholder="email"
             onChange={handleChange}
           />
           <input
             id="password"
             type="password"
-            className="border bg-white rounded-lg p-2.5 "
+            className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none"
             placeholder="password"
             onChange={handleChange}
           />
@@ -79,7 +79,7 @@ export default function Signin() {
             <span className="text-blue-600 ml-3">Sign Up</span>
           </Link>
         </div>
-        {error && <p className="text-red-500 mt-5 ">{error}</p>}
+        {error && <p className="text-white mt-5 ">{error}</p>}
       </div>
     </div>
   );

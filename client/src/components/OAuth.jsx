@@ -5,10 +5,12 @@ import { signInSuccess } from "../redux/user/userSlice";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc"; // Import Google icon
+
 export default function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -37,15 +39,15 @@ export default function OAuth() {
       console.log("could not sign in with google", error);
     }
   };
-  
+
   return (
     <button
       type="button"
       onClick={handleGoogleClick}
-      className="bg-red-500 text-white p-3  rounded-lg hover:opacity-95 uppercase"
+      className="bg-red-700 flex gap-2 items-center justify-center text-white p-3  rounded-lg hover:opacity-95 uppercase"
     >
+      <FcGoogle size={20} /> {/* Add Google icon */}
       continue with Google
     </button>
-    
   );
 }

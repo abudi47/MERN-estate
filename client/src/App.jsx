@@ -13,7 +13,7 @@ import Listing from "./pages/Listing";
 import Search from "./pages/Search";
 import PrivateRoute from "./components/PrivateRoute";
 import Footer from "./components/Footer";
-
+import PageNotFound from "./pages/PageNotFound";
 function App() {
   return (
     <BrowserRouter>
@@ -30,6 +30,7 @@ function App() {
           <Route path="/create-listing" element={<CreateListing />} />
           <Route path="/edit-listing/:lisId" element={<UpdateListing />} />
         </Route>
+        <Route path="*" element={<PageNotFound />}></Route>
     
       </Routes>
       <Footer />
