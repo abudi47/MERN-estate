@@ -12,6 +12,7 @@ export default function Search() {
     order: "desc",
   });
   const navigate = useNavigate();
+  
   const handleChange = (e) => {
     if (
       e.target.id === "all" ||
