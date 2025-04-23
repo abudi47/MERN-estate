@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { storage } from "../appWrite/appwriteConfig";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { set } from "mongoose";
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -50,6 +53,7 @@ export default function CreateListing() {
   const handleImageSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
+    setLoadingImage(true);
     setImageUploadError(false);
     if (files.length > 0 && files.length + formData.imageUrls.length <= 6) {
       const promises = Array.from(files).map((file) => storeImage(file));
@@ -57,6 +61,8 @@ export default function CreateListing() {
       try {
         const imageUrls = await Promise.all(promises);
         setFormData({ ...formData, imageUrls });
+        setLoadingImage(true);
+
         console.log("All images uploaded successfully:", imageUrls);
 
         setImageUploadError(true);
@@ -64,6 +70,8 @@ export default function CreateListing() {
       } catch (error) {
         console.error("Error uploading images:", error);
         setImageUploadError("Image upload failed,(2 MB) MAX per image ");
+      } finally {
+        setLoadingImage(false);
       }
     } else {
       console.error("Please upload between 1 and 6 images.");
@@ -154,7 +162,7 @@ export default function CreateListing() {
       >
         <div className="flex flex-col gap-4 flex-1 ">
           <input
-            className="p-3 bg-white border border-gray-200 rounded-lg "
+            className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
             placeholder="Name"
             id="name"
             required
@@ -162,14 +170,14 @@ export default function CreateListing() {
             value={formData.name} // Add this line
           />
           <input
-            className="p-5 bg-white border border-gray-200 rounded-lg "
+            className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
             placeholder="Description"
             id="description"
             onChange={handleChange}
             value={formData.description}
           />
           <input
-            className="p-3 bg-white border border-gray-200 rounded-lg "
+            className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
             placeholder="Address"
             id="address"
             onChange={handleChange}
@@ -232,7 +240,7 @@ export default function CreateListing() {
           <div className="flex  gap-6 flex-wrap">
             <div className="flex items-center gap-2 ">
               <input
-                className="p-3 border border-gray-200 rounded-lg "
+                className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
                 placeholder=""
                 type="number"
                 id="bedrooms"
@@ -245,7 +253,7 @@ export default function CreateListing() {
             </div>
             <div className="flex items-center gap-2 ">
               <input
-                className="p-3 border border-gray-200 rounded-lg "
+                className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
                 placeholder=""
                 type="number"
                 id="bathrooms"
@@ -258,7 +266,7 @@ export default function CreateListing() {
             </div>
             <div className="flex items-center gap-2 ">
               <input
-                className="p-5 border border-gray-200 rounded-lg "
+                className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
                 placeholder=""
                 type="number"
                 id="regularPrice"
@@ -275,7 +283,7 @@ export default function CreateListing() {
             {formData.offer && (
               <div className="flex items-center gap-2 ">
                 <input
-                  className="p-5 border border-gray-200 rounded-lg "
+                  className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
                   placeholder=""
                   type="number"
                   id="discountPrice"
@@ -300,11 +308,11 @@ export default function CreateListing() {
               The first image will be the cover (max 6)
             </span>
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-4 my-4">
             <input
               onChange={(e) => setFiles(e.target.files)}
               type="file"
-              className="p-3 border shadow border-gray-300 rounded w-full"
+              className="border cursor-pointer  rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
               id="images"
               multiple
               accept="image/*"
@@ -318,6 +326,11 @@ export default function CreateListing() {
               {uploading ? "Uploading....." : "Upload"}
             </button>
           </div>
+          {loadingImage && (
+            <div className="flex justify-center mt-2">
+              <div className="w-8 h-8 border-4 border-green-900 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
           <p className="text-red-700">{imageUploadError && imageUploadError}</p>
           {console.log("image url isssss", formData.imageUrls)}
 

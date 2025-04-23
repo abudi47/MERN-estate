@@ -34,12 +34,12 @@ export default function Header() {
   console.log("search term", searchTerm)
 
   return (
-    <header className="bg-slate-200 shadow-md">
+    <header className="bg-slate-900 shadow-md">
       <div className="flex justify-between items-center mx-auto max-w-6xl p-3">
-        <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
-          <span className="text-slate-500">#Abd</span>
-          <span className="text-slate-700">Estate</span>
-        </h1>
+        <Link to={"/"} className="font-bold text-sm sm:text-xl flex flex-wrap cursor-pointer">
+          <span className="text-gray-300">Abd</span>
+          <span className="text-gray-300">Estate</span>
+        </Link>
 
         <form onSubmit={handleSubmit} className="bg-slate-100 p-3  rounded-lg flex items-center ">
           <input
@@ -57,14 +57,14 @@ export default function Header() {
           </button>
         </form>
 
-        <ul className="flex gap-4">
-          <Link to={"/"}>
-            <li className="hidden text-slate-700 sm:inline hover:underline">
+        <ul className="flex gap-5 justify-center items-center">
+          <Link to={"/"} id="home">
+            <li className="hidden text-gray-300 sm:inline hover:underline font-bold">
               Home
             </li>
           </Link>
           <Link to={"/about"}>
-            <li className="hidden text-slate-700 sm:inline hover:underline">
+            <li className="hidden text-gray-300 sm:inline hover:underline font-bold">
               About
             </li>
           </Link>
@@ -72,7 +72,7 @@ export default function Header() {
           <Link to={"/profile"}>
             {currentUser ? (
               <img
-                className="rounded-full object-cover h-8 w-8"
+                className="rounded-full object-cover w-11 h-11 self-center"
                 src={currentUser.avatar}
                 alt="profile"
               />

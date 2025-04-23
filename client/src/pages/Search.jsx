@@ -59,6 +59,7 @@ export default function Search() {
   };
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
+  const [searchloader, setSerchLoader] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -236,16 +237,16 @@ export default function Search() {
           <ListingCard listings={listings} loading={loading} />
 
         </div> */}
-        <div className=" flex flex-wrap   gap-4  w-full p-4 ">
+        <div className=" flex flex-wrap items-center justify-center my-auto gap-4  w-full p-4 ">
           {!loading && listings.length === 0 && (
             <h1 className="text-xl flex font-semibold text-slate-700  mt-5">
               No listings found!
             </h1>
           )}
           {loading && (
-            <h1 className="text-xl flex font-semibold text-slate-700  mt-5">
-              Loading....
-            </h1>
+            <div className="flex items-center  justify-center mt-2">
+              <div className="w-32 h-32  border-4 border-green-900 border-t-transparent rounded-full animate-spin"></div>
+            </div>
           )}
 
           {!loading &&

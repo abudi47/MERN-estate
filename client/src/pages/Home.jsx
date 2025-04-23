@@ -51,24 +51,24 @@ export default function Home() {
   return (
     <div>
       {/* top*/}
-      <div className="flex flex-col gap-6 p-28 px-3 mx-auto max-w-6xl">
-        <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-          Find tour next <span className="text-slate-500">perfect</span> <br />{" "}
-          place with ease
-        </h1>
-        <div className="text-gray-500 text-xs sm:text-sm ">
-          Abd Estate will help you find your home fast , east and comfortable
-          <br /> Our expert support are always available{" "}
+      <div>
+        <div className="flex flex-col gap-6 p-28 px-3 mx-auto max-w-6xl">
+          <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
+            Find tour next <span className="text-slate-500">perfect</span>{" "}
+            <br /> place with ease
+          </h1>
+          <div className="text-gray-500 text-xs sm:text-sm ">
+            Abd Estate will help you find your home fast , east and comfortable
+            <br /> Our expert support are always available{" "}
+          </div>
+          <Link
+            to="/search"
+            className="w-fit text-xs sm:text-sm bg-slate-600 border rounded-lg text-white p-3 flex font-bold "
+          >
+            Let's get started....
+          </Link>
         </div>
-
-        <Link
-          to="/search"
-          className="text-xs sm:text-sm text-blue-800 font-bold hover:underline"
-        >
-          Let's get started....
-        </Link>
       </div>
-
       {/* swiper*/}
       <Swiper navigation>
         {offerListing &&

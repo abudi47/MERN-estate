@@ -27,6 +27,8 @@ export default function Profile() {
   const [updateSuccesser, setUpdateSuccesser] = useState(false);
   const [userListing, setUserListing] = useState([]);
   const [showListingError, setShowListingError] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
+  const [loadingShow, setLoadingShow] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -53,6 +55,7 @@ export default function Profile() {
     }
 
     try {
+      setLoadingImage(true);
       const fileId = `unique()`; // Generates a unique ID
       const response = await storage.createFile(
         "67ecde970033388e34f9",
@@ -70,6 +73,8 @@ export default function Profile() {
       console.log(imageUrl);
     } catch (error) {
       console.error("Upload failed:", error);
+    } finally {
+      setLoadingImage(false);
     }
   };
 
@@ -101,8 +106,8 @@ export default function Profile() {
       dispatch(updateFailed(error.message));
     }
   };
-  console.log("eeeee",loading)
-  console.log("eeeee",error)
+  console.log("eeeee", loading);
+  console.log("eeeee", error);
   const deleteHandler = async () => {
     console.log("deleting ....");
     try {
@@ -141,6 +146,7 @@ export default function Profile() {
   const handleListings = async () => {
     try {
       setShowListingError(false);
+      setLoadingShow(true);
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
       if (!res.ok) {
         throw new Error("Failed to fetch listings");
@@ -157,28 +163,32 @@ export default function Profile() {
 
       setShowListingError(true);
     }
+    finally {
+      setLoadingShow(false);
+    }
   };
 
   const deleteListinghandler = async (lisID) => {
     try {
-      const res = await fetch(`/api/listing/delete/${lisID}` , {
+      const res = await fetch(`/api/listing/delete/${lisID}`, {
         method: "DELETE",
-      })
+      });
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
-        return
+        return;
       }
-      setUserListing((prev) => prev.filter((listing) => listing._id !== lisID))
+      setUserListing((prev) => prev.filter((listing) => listing._id !== lisID));
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-
-  }
+  };
   return (
     <div>
-      <div className="bg-white shadow-lg rounded-lg items-center mx-auto max-w-2xl p-6 mt-8">
-      <h1 className="text-3xl font-semibold text-center mx-auto">Profile</h1>
+      <div className=" shadow-lg rounded-lg items-center mx-auto max-w-2xl p-6 mt-8">
+        <h1 className="text-3xl text-slate-700 font-semibold text-center mx-auto">
+          Profile
+        </h1>
         <form className="flex mt-7 flex-col gap-4" onSubmit={handleSubmit}>
           <input
             onChange={handleFileChange}
@@ -189,10 +199,16 @@ export default function Profile() {
           />
           <img
             onClick={() => fileRef.current.click()}
-            className="rounded-full h-30 border border-s-amber-200 w-30 self-center object-cover cursor-pointer"
+            className="rounded-full h-30 shadow-lg hover:scale-115 shadow-slate-800 border border-slate-50 w-30 self-center object-cover cursor-pointer"
             src={imageUrl || currentUser.avatar}
             alt="profile"
           />
+          {loadingImage && (
+            <div className="flex justify-center mt-2">
+              <div className="w-8 h-8 border-4 border-green-900 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+
           {imageUrl && (
             <p className="text-green-600 text-center">
               Image uploaded successfully!
@@ -203,7 +219,7 @@ export default function Profile() {
             type="text"
             id="username"
             placeholder="username"
-            className="border-slate-400 focus:outline-none bg-white border rounded-lg p-2.5"
+            className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
             onChange={handleChange}
           />
           <input
@@ -212,13 +228,13 @@ export default function Profile() {
             id="email"
             type="email"
             placeholder="email"
-            className="border-slate-400 focus:outline-none bg-white border rounded-lg p-2.5"
+            className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
           />
           <input
             id="password"
             type="password"
             placeholder="password"
-            className="border-slate-400 focus:outline-none bg-white border rounded-lg p-2.5"
+            className="border rounded-lg p-3 w-full bg-white border-amber-50 shadow-md shadow-slate-600 focus:outline-none "
             onChange={handleChange}
           />
 
@@ -230,7 +246,7 @@ export default function Profile() {
           </button>
           <Link
             to={"/create-listing"}
-            className="bg-green-600 p-2.5 text-center text-amber-50 uppercase rounded-lg hover:opacity-95 disabled:opacity-80"
+            className="bg-green-600 p-2.5 text-center text-white uppercase rounded-lg hover:opacity-95 disabled:opacity-80"
           >
             create listing
           </Link>
@@ -260,44 +276,54 @@ export default function Profile() {
         >
           Show listings{" "}
         </button>
+        {loadingShow && (
+            <div className="flex justify-center mt-2">
+              <div className="w-8 h-8 border-4 border-green-900 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
         <p className="text-red-950 text-center mt-3 ">
           {showListingError ? "Error showing listing..." : ""}
         </p>
         <div>
           {userListing && userListing.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <h1 className="text-center mt-7 text-2xl font-semibold">Your listing</h1>
+            <div className="flex flex-col gap-4 ">
+              <h1 className="text-center mt-7 text-2xl font-semibold text-slate-700">
+                Your listing
+              </h1>
               {userListing.map((lis) => (
-              <div
-                className="shadow-md rounded-lg gap-4   flex justify-between items-center p-3 "
-                key={lis._id}
-              >
-                <Link to={`listings/${lis._id}`}>
-                  <img
-                    src={lis.imageUrls[0]}
-                    alt="listing img"
-                    className="h-16 w-16 object-contain shadow-sm shadow-green-300 rounded-md"
-                  />
-                </Link>
-
-                <Link
-                  className=" flex-1 text-slate-700 font-semibold  hover:underline truncate"
-                  to={`/listing/${lis._id}`}
+                <div
+                  className="shadow-md shadow-slate-500 bg-white rounded-lg gap-4   flex justify-between items-center p-3 "
+                  key={lis._id}
                 >
-                  <p className="">{lis.name}</p>
-                </Link>
-
-                <div className="flex flex-col items-center">
-                  <button onClick={() => deleteListinghandler(lis._id)} className="text-red-700 uppercase cursor-pointer">
-                    Delete
-                  </button>
-                  <Link to={`/edit-listing/${lis._id}`}>
-                  <button className="text-green-700 uppercase cursor-pointer">
-                    Edit
-                  </button>
+                  <Link to={`listings/${lis._id}`}>
+                    <img
+                      src={lis.imageUrls[0]}
+                      alt="listing img"
+                      className="h-16 w-16 object-contain shadow-sm shadow-green-300 rounded-md"
+                    />
                   </Link>
+
+                  <Link
+                    className=" flex-1 text-slate-700 font-semibold  hover:underline truncate"
+                    to={`/listing/${lis._id}`}
+                  >
+                    <p className="">{lis.name}</p>
+                  </Link>
+
+                  <div className="flex flex-col items-center">
+                    <button
+                      onClick={() => deleteListinghandler(lis._id)}
+                      className="text-red-700 uppercase cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                    <Link to={`/edit-listing/${lis._id}`}>
+                      <button className="text-green-700 uppercase cursor-pointer">
+                        Edit
+                      </button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
               ))}
             </div>
           )}
