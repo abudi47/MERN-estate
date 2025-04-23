@@ -17,9 +17,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       // unique: true
     },
-    avatar: { type: String,
-      default: "https://estudent.astu.edu.et/api/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBN2VtQWc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--09bde2b84da8ca332c0a556a54d272d63afc527a/1716708330046.jpg"
-     },
+    avatar: {
+      type: String,
+      default: "https://cdn-icons-png.flaticon.com/128/4140/4140037.png",
+    },
   },
   { timestamps: true }
 ); // Adds createdAt and updatedAt fields automatically

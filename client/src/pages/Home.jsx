@@ -5,6 +5,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css/bundle";
 import SwiperCore from "swiper";
 import ListingCard from "../components/ListingCard";
+import Experience from "../components/Experience";
 
 export default function Home() {
   const [offerListing, setOfferListng] = useState([]);
@@ -91,8 +92,15 @@ export default function Home() {
         {offerListing && offerListing.length > 0 && (
           <div className="my-3">
             <div>
-              <h2 className="text-2xl font-semibold text-slate-700 ">Recent offers</h2>
-              <Link className="text-sm text-blue-800 hover:underline" to={"/search?offer=true"}>Show more offers</Link>
+              <h2 className="text-2xl font-semibold text-slate-700 ">
+                Recent offers
+              </h2>
+              <Link
+                className="text-sm text-blue-800 hover:underline"
+                to={"/search?offer=true"}
+              >
+                Show more offers
+              </Link>
             </div>
 
             <div className="flex   flex-wrap  gap-4   ">
@@ -107,8 +115,15 @@ export default function Home() {
         {rentListing && rentListing.length > 0 && (
           <div className="my-3">
             <div>
-              <h2 className="text-2xl font-semibold text-slate-700 ">Recent places for Rent</h2>
-              <Link className="text-sm text-blue-800 hover:underline" to={"/search?type=rent"}>Show more places for rent</Link>
+              <h2 className="text-2xl font-semibold text-slate-700 ">
+                Recent places for Rent
+              </h2>
+              <Link
+                className="text-sm text-blue-800 hover:underline"
+                to={"/search?type=rent"}
+              >
+                Show more places for rent
+              </Link>
             </div>
 
             <div className="flex   flex-wrap  gap-4   ">
@@ -123,8 +138,16 @@ export default function Home() {
         {saleLisintg && saleLisintg.length > 0 && (
           <div className="my-3">
             <div>
-              <h2 className="text-2xl font-semibold text-slate-700 "> Recent places for Sale</h2>
-              <Link className="text-sm text-blue-800 hover:underline" to={"/search?type=sale"}>Show more places for sale </Link>
+              <h2 className="text-2xl font-semibold text-slate-700 ">
+                {" "}
+                Recent places for Sale
+              </h2>
+              <Link
+                className="text-sm text-blue-800 hover:underline"
+                to={"/search?type=sale"}
+              >
+                Show more places for sale{" "}
+              </Link>
             </div>
 
             <div className="flex   flex-wrap  gap-4   ">
@@ -134,6 +157,13 @@ export default function Home() {
             </div>
           </div>
         )}
+      </div>
+
+      <div className="max-w-7xl mx-auto p-3 flex flex-col gap-8 my-8">
+        <div className="flex flex-col mx-auto items-center justify-center my-10 text-3xl text-slate-700 font-semibold">
+          <h1>Why You choose us</h1>
+        </div>
+        <Experience />
       </div>
     </div>
   );

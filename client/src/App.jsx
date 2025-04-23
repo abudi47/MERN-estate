@@ -12,6 +12,7 @@ import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
 import Search from "./pages/Search";
 import PrivateRoute from "./components/PrivateRoute";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -29,7 +30,9 @@ function App() {
           <Route path="/create-listing" element={<CreateListing />} />
           <Route path="/edit-listing/:lisId" element={<UpdateListing />} />
         </Route>
+    
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
