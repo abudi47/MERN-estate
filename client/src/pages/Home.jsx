@@ -67,7 +67,7 @@ export default function Home() {
             <br /> Our expert support are always available{" "}
           </div>
           <Link
-            to="/search"
+            to="/search?searchTerm=&type=all"
             className="w-fit text-xs sm:text-sm bg-slate-600 border rounded-lg text-white p-3 flex font-bold "
           >
             Let's get started....
