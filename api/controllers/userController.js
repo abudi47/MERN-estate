@@ -69,14 +69,32 @@ export const getUserListing = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
   try {
-    const user =await User.findById(req.params.id);
+    const user = await User.findById(req.params.id);
     if (!user) {
-      return next( errorHandler(404, "User not found"));
+      return next(errorHandler(404, "User not found"));
     }
-    const {password:pass , ...rest} = user._doc;
+    const { password: pass, ...rest } = user._doc;
     res.status(200).json(rest);
   } catch (error) {
     next(error);
   }
+};
 
+export const getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    if (!users || users.length === 0) {
+      return next(errorHandler(404, "No users found"));
+    }
+
+    // Remove passwords from all users
+    const usersWithoutPasswords = users.map((user) => {
+      const { password, ...rest } = user._doc;
+      return rest;
+    });
+
+    res.status(200).json(usersWithoutPasswords);
+  } catch (error) {
+    next(error);
+  }
 };

@@ -14,7 +14,7 @@ import Search from "./pages/Search";
 import PrivateRoute from "./components/PrivateRoute";
 import Footer from "./components/Footer";
 import PageNotFound from "./pages/PageNotFound";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 function App() {
   return (
     <BrowserRouter>
@@ -33,7 +33,7 @@ function App() {
         </Route>
 
         <Route element={<PrivateRoute adminOnly={true} />}>
-          <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
+          <Route path="/admin/" element={<AdminDashboard />}></Route>
         </Route>
         <Route path="*" element={<PageNotFound />}></Route>
       </Routes>

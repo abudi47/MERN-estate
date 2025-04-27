@@ -41,7 +41,7 @@ export default function Signin() {
       dispatch(signInSuccess(data));
 
       if (data?.role === "admin") {
-        navigate("/admin/dashboard");
+        navigate("/admin");
       } else if (data?.role === "user") {
         navigate("/profile");
       }
