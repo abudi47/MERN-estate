@@ -5,10 +5,17 @@ import jwt from "jsonwebtoken";
 import { userInfo } from "os";
 export const signup = async (req, res, next) => {
   // console.log(req.body)
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword });
-
+  const newUser = new User({
+    username,
+    email,
+    password: hashedPassword,
+    role: role || "user",
+  });
+  if (role && !["user", "admin"].includes(role)) {
+    return res.status(400).json({ message: "Invalid role" });
+  }
   try {
     await newUser.save();
     res.status(201).json("user created successfuly/...");
@@ -91,4 +98,7 @@ export const signOut = async (req, res, next) => {
   } catch (error) {
     next(error.message);
   }
+};
+export const admin = (req, res) => {
+  res.status(200).json({ message: "Welcome, Admin!" });
 };

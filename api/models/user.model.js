@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "https://cdn-icons-png.flaticon.com/128/4140/4140037.png",
     },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user'
+    }
   },
   { timestamps: true }
 ); // Adds createdAt and updatedAt fields automatically

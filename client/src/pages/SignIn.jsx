@@ -39,7 +39,12 @@ export default function Signin() {
         return;
       }
       dispatch(signInSuccess(data));
-      navigate("/profile");
+
+      if (data?.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (data?.role === "user") {
+        navigate("/profile");
+      }
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
@@ -79,7 +84,7 @@ export default function Signin() {
             <span className="text-blue-600 ml-3">Sign Up</span>
           </Link>
         </div>
-        {error && <p className="text-white mt-5 ">{error}</p>}
+        {error && <p className="text-red-500 mt-5 ">{error}</p>}
       </div>
     </div>
   );

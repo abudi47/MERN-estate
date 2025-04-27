@@ -54,8 +54,14 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+      required: true,
+    },
   },
-  { timestamps: true,  }
+  { timestamps: true, collection: "listingss"  }
 );
 
 const Listing = mongoose.model("Listing", listingSchema);
