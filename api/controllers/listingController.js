@@ -17,13 +17,15 @@ export const deleteListing = async (req, res, next) => {
   if (!listing) {
     return next(errorHandler(404, "Listing not found...."));
   }
-  if (req.user.id !== listing.userRef) {
-    return next(errorHandler(401, "You can only delete your own listing..."));
+  // console.log("Listing:", listing); // Debug log
+  console.log("Requesting user:", req.user.role); // Debug log
+  if (req.user.role !== "admin" && req.user.id !== listing.userRef) {
+    return next(errorHandler(401, "You can only delete your own listing or you must be an admin..."));
   }
 
   try {
     await Listing.findByIdAndDelete(req.params.id);
-    return res.status(200).json("user has been deleted successfully.....");
+    return res.status(200).json("Lisitng has been deleted successfully.....");
   } catch (error) {
     next(error);
   }
@@ -36,7 +38,7 @@ export const updateListing = async (req, res, next) => {
     return next(errorHandler(404, "Listing not found...."));
   }
   if (req.user.id !== listing.userRef) {
-    return next(errorHandler(401, "You can only delete your own listing..."));
+    return next(errorHandler(401, "You can only update your own listing..."));
   }
   try {
     const updateListing = await Listing.findByIdAndUpdate(
@@ -86,10 +88,10 @@ export const getListings = async (req, res, next) => {
     let type = req.query.type;
 
     if (type === undefined || type === "all") {
-      type = { $in: ["sale" , "rent"] };
+      type = { $in: ["sale", "rent"] };
     } //In effect, this means "don’t filter by type."
 
-    const  searchTerm = req.query.searchTerm || "";
+    const searchTerm = req.query.searchTerm || "";
 
     const sort = req.query.sort || "createdAt";
     const order = req.query.order || "desc";
@@ -100,8 +102,29 @@ export const getListings = async (req, res, next) => {
       furnished,
       parking,
       type,
-    }).sort({ [sort]: order}).limit(limit).skip(startIndex);
+    })
+      .sort({ [sort]: order })
+      .limit(limit)
+      .skip(startIndex);
     return res.status(200).json(listing);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateStatus = async (req, res, next) => {
+  const listing = await Listing.findById(req.params.id);
+
+  if (!listing) {
+    return next(errorHandler(404, "Listing not found...."));
+  }
+  try {
+    const updateStatus = await Listing.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true }
+    );
+    res.status(200).json(updateStatus);
   } catch (error) {
     next(error);
   }
