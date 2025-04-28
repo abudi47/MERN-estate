@@ -172,41 +172,24 @@ const headCells = [
     label: "Id",
   },
   {
-    id: "status",
+    id: "role",
     numeric: true,
     disablePadding: false,
-    label: "Status",
+    label: "Role",
   },
   {
-    id: "name",
+    id: "username",
     numeric: true,
     disablePadding: false,
-    label: "Name",
+    label: "username",
   },
   {
-    id: "type",
+    id: "email",
     numeric: true,
     disablePadding: false,
-    label: "Type",
+    label: "email",
   },
-  {
-    id: "address",
-    numeric: true,
-    disablePadding: false,
-    label: "Address",
-  },
-  {
-    id: "details",
-    numeric: true,
-    disablePadding: false,
-    label: "Details",
-  },
-  {
-    id: "actions",
-    numeric: true,
-    disablePadding: false,
-    label: "Actions",
-  },
+ 
 ];
 
 export default function UserTable({ users }) {
@@ -220,26 +203,8 @@ export default function UserTable({ users }) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    setRows(listings);
-  }, [listings]);
-
-  const handleStatusChange = useCallback(async (id, status) => {
-    try {
-      const response = await fetch(`/api/listing/updateStatus/${id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
-      });
-
-      if (!response.ok) throw new Error("Status update failed");
-
-      setRows((prevRows) =>
-        prevRows.map((row) => (row._id === id ? { ...row, status } : row))
-      );
-    } catch (error) {
-      console.error("Error updating status:", error);
-    }
-  }, []);
+    setRows(users);
+  }, [users]);
 
   const deleteSelectedListings = useCallback(async () => {
     if (!selected.length || isDeleting) return;
@@ -248,22 +213,12 @@ export default function UserTable({ users }) {
     try {
       const results = await Promise.allSettled(
         selected.map((id) =>
-          fetch(`/api/listing/delete/${id}`, {
+          fetch(`/api/user/delete/${id}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
           })
         )
       );
-
-      // Filter out failed deletions
-      const failedDeletes = results.filter(
-        (result) => result.status === "rejected" || !result.value?.ok
-      );
-
-      if (failedDeletes.length) {
-        console.error(`${failedDeletes.length} deletions failed`);
-        return;
-      }
 
       // Update the rows state to remove successfully deleted items
       setRows((prevRows) =>
@@ -398,38 +353,10 @@ export default function UserTable({ users }) {
                     >
                       {row._id}
                     </TableCell>
-                    <TableCell align="right">{row.status}</TableCell>
-                    <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="right">{row.type}</TableCell>
-                    <TableCell align="right">{row.address}</TableCell>
-                    <TableCell align="center">
-                      <Link
-                        to={`/listing/${row._id}`} // Redirect to the listing detail page
-                        className=" flex  hover:underline  text-blue-600 py-1.5 px-3 rounded"
-                      >
-                        View Details
-                      </Link>
-                    </TableCell>
-                    <TableCell align="right">
-                      <div className="flex items-center justify-center">
-                        <button
-                          onClick={() =>
-                            handleStatusChange(row._id, "accepted")
-                          }
-                          className="bg-green-700 text-white border-none py-1.5 px-3 rounded cursor-pointer mr-2"
-                        >
-                          Accept
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleStatusChange(row._id, "rejected")
-                          }
-                          className="bg-red-700 text-white border-none py-1.5 px-3 rounded cursor-pointer mr-2"
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    </TableCell>
+                    <TableCell align="center">{row.role}</TableCell>
+                    <TableCell align="center">{row.username}</TableCell>
+                    <TableCell align="center">{row.email}</TableCell>
+                  
                   </TableRow>
                 );
               })}
