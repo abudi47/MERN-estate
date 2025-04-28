@@ -129,3 +129,16 @@ export const updateStatus = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const getAllListings = async (req, res, next) => {
+  try {
+    const listings = await Listing.find({});
+    if (!listings) {
+      return next(errorHandler(404, "No listings found...."));
+    }
+    res.status(200).json(listings);
+  } catch (error) {
+    next(error);
+  }
+}

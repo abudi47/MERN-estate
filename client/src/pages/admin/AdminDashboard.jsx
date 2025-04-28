@@ -67,7 +67,7 @@ export default function AdminDashboard({ window }) {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }),
-          fetch("/api/listing/get", {
+          fetch("/api/listing/getAllLists", {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -130,7 +130,7 @@ export default function AdminDashboard({ window }) {
         {pathname === "/users" && (
           <>
             <Typography variant="h4">User Management Section</Typography>
-            <UserTable />
+            <UserTable users={users} />
           </>
         )}
         {/* You can add more pages like settings/help/about here later if you want */}

@@ -22,7 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { useState, useEffect, useCallback, useMemo } from "react";
-
+import { Link } from "react-router-dom";
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -402,7 +402,14 @@ export default function ListingTable({ listings }) {
                     <TableCell align="center">{row.name}</TableCell>
                     <TableCell align="right">{row.type}</TableCell>
                     <TableCell align="right">{row.address}</TableCell>
-                    <TableCell align="right">{row.details}</TableCell>
+                    <TableCell align="center">
+                      <Link
+                        to={`/listing/${row._id}`} // Redirect to the listing detail page
+                        className = " flex  hover:underline  text-blue-600 py-1.5 px-3 rounded"
+                      >
+                        View Details
+                      </Link>
+                    </TableCell>
                     <TableCell align="right">
                       <div className="flex items-center justify-center">
                         <button

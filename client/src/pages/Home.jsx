@@ -18,40 +18,48 @@ export default function Home() {
       try {
         const res = await fetch("/api/listing/get?offer=true&limit=4");
         const data = await res.json();
-        setOfferListng(data);
+        const acceptedListings = data.filter(
+          (listing) => listing.status === "accepted"
+        );
+        setOfferListng(acceptedListings);
         await fetchSaleListing();
       } catch (error) {
         console.log(error);
       }
     };
-  
+
     const fetchSaleListing = async () => {
       try {
         const res = await fetch("/api/listing/get?type=sale&limit=4");
         const data = await res.json();
-        setSaleListing(data);
+        const acceptedListings = data.filter(
+          (listing) => listing.status === "accepted"
+        );
+        setSaleListing(acceptedListings);
         await fetchRentListing();
       } catch (error) {
         console.log(error);
       }
     };
-  
+
     const fetchRentListing = async () => {
       try {
         const res = await fetch("/api/listing/get?type=rent&limit=4");
         const data = await res.json();
-        setRentListing(data);
+        const acceptedListings = data.filter(
+          (listing) => listing.status === "accepted"
+        );
+        setRentListing(acceptedListings);
       } catch (error) {
         console.log(error);
       } finally {
         setLoadingData(false); // ✅ Only stop loading when last fetch is done
       }
     };
-  
+
     setLoadingData(true); // ✅ Start loading
     fetchOfferListing();
   }, []);
-  
 
   return (
     <div>

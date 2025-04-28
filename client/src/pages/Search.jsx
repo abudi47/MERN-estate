@@ -12,7 +12,7 @@ export default function Search() {
     order: "desc",
   });
   const navigate = useNavigate();
-  
+
   const handleChange = (e) => {
     if (
       e.target.id === "all" ||
@@ -96,12 +96,15 @@ export default function Search() {
         const searchQuery = urlParams.toString();
         const res = await fetch(`/api/listing/get?${searchQuery}`);
         const data = await res.json();
+        const acceptedListings = data.filter(
+          (listing) => listing.status === "accepted"
+        );
         if (data.length > 8) {
           setShowmore(true);
         } else {
           setShowmore(false);
         }
-        setListings(data);
+        setListings(acceptedListings);
         setLoading(false);
       };
       fetchListings();
