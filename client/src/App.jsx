@@ -12,7 +12,7 @@ import Listing from "./pages/Listing";
 import Search from "./pages/Search";
 import PrivateRoute from "./components/PrivateRoute";
 import PageNotFound from "./pages/PageNotFound";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminPage from "./pages/admin/AdminPage";
 import AdminLayout from "./layouts/AdminLayout";
 import MainLayout from "./layouts/MainLayout";
 function App() {
@@ -35,7 +35,7 @@ function App() {
 
         <Route element={<PrivateRoute adminOnly={true} />}>
           <Route element={<AdminLayout />}>
-            <Route path="/admin/" element={<AdminDashboard />} />
+            <Route path="/admin/" element={<AdminPage />} />
           </Route>
         </Route>
         <Route path="*" element={<PageNotFound />}></Route>

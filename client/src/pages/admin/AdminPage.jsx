@@ -12,6 +12,9 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { useDemoRouter } from "@toolpad/core/internal";
 import LisitingTable from "./ListingTable";
 import UserTable from "./UserTable";
+import Dashboard from "./Dashboard";
+import About from "../About";
+import Profile from "../Profile";
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -23,7 +26,7 @@ const demoTheme = createTheme({
   },
 });
 
-export default function AdminDashboard({ window }) {
+export default function AdminPage({ window }) {
   const [listings, setListings] = useState([]);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,9 +56,21 @@ export default function AdminDashboard({ window }) {
     },
     { kind: "divider" },
     { kind: "header", title: "Other items" },
-    { segment: "settings", title: "Settings" },
-    { segment: "help", title: "Help" },
-    { segment: "about", title: "About" },
+    {
+      segment: "settings",
+      title: "Settings",
+      onClick: () => router.push("/admin/settings"),
+    },
+    {
+      segment: "help",
+      title: "Help",
+      onClick: () => router.push("/admin/help"),
+    },
+    {
+      segment: "about",
+      title: "About",
+      onClick: () => router.push("/admin/about"),
+    },
   ];
 
   useEffect(() => {
@@ -118,7 +133,10 @@ export default function AdminDashboard({ window }) {
     return (
       <Box sx={{ p: 3 }}>
         {pathname === "/dashboard" && (
-          <Typography variant="h4">Welcome to the Admin Dashboard</Typography>
+          <>
+            <Typography variant="h4">Welcome to the Admin Dashboard</Typography>
+            <Dashboard listings={listings} users={users} />
+          </>
         )}
         {pathname === "/approvals" && (
           <>
@@ -134,6 +152,24 @@ export default function AdminDashboard({ window }) {
           </>
         )}
         {/* You can add more pages like settings/help/about here later if you want */}
+        {pathname === "/settings" && (
+          <>
+            <Typography variant="h4">Settings</Typography>
+            <Profile /> {/* Render Profile page */}
+          </>
+        )}
+        {pathname === "/help" && (
+          <>
+            <Typography variant="h4">Help Section</Typography>
+            {/* <Help /> Render Help page */}
+          </>
+        )}
+        {pathname === "/about" && (
+          <>
+            <Typography variant="h4">About Us</Typography>
+            <About /> {/* Render About page */}
+          </>
+        )}
       </Box>
     );
   };
@@ -165,10 +201,10 @@ export default function AdminDashboard({ window }) {
   );
 }
 
-AdminDashboard.propTypes = {
+AdminPage.propTypes = {
   window: PropTypes.func,
 };
 
-AdminDashboard.defaultProps = {
+AdminPage.defaultProps = {
   window: () => window,
 };
