@@ -5,25 +5,26 @@ import jwt from "jsonwebtoken";
 import { userInfo } from "os";
 export const signup = async (req, res, next) => {
   // console.log(req.body)
-  const { username, email, password, role } = req.body;
-  const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({
-    username,
-    email,
-    password: hashedPassword,
-    role: role || "user",
-  });
-  if (role && !["user", "admin"].includes(role)) {
-    return res.status(400).json({ message: "Invalid role" });
-  }
+  const { username, email, password } = req.body;
+
   try {
+    const existingAdmin = await User.findOne({ role: "admin" });
+    if (existingAdmin && email === existingAdmin.email) {
+      return res.status(403).json({ message: "cannot register as admin" });
+    }
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      role: "user",
+    });
     await newUser.save();
     res.status(201).json("user created successfuly/...");
   } catch (error) {
     next(error);
   }
 };
-
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -34,7 +35,8 @@ export const signin = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, "Wrong credentials"));
     const token = jwt.sign(
       { id: validUser._id, role: validUser.role },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
     );
     const { password: pass, ...rest } = validUser._doc;
     res

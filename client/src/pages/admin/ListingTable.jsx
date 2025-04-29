@@ -55,7 +55,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align="center"
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -398,19 +398,19 @@ export default function ListingTable({ listings }) {
                     >
                       {row._id}
                     </TableCell>
-                    <TableCell align="right">{row.status}</TableCell>
+                    <TableCell align="center">{row.status}</TableCell>
                     <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="right">{row.type}</TableCell>
-                    <TableCell align="right">{row.address}</TableCell>
+                    <TableCell align="center">{row.type}</TableCell>
+                    <TableCell align="center">{row.address}</TableCell>
                     <TableCell align="center">
                       <Link
                         to={`/listing/${row._id}`} // Redirect to the listing detail page
-                        className = " flex  hover:underline  text-blue-600 py-1.5 px-3 rounded"
+                        className=" flex items-end justify-end hover:underline  text-blue-600 py-1.5  rounded"
                       >
                         View Details
                       </Link>
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                       <div className="flex items-center justify-center">
                         <button
                           onClick={() =>
